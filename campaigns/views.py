@@ -18,13 +18,12 @@ class CampaignViewset(viewsets.ReadOnlyModelViewSet):
     search_fields = ('name', 'description')
     ordering_fields = ('name', 'active',)
 
-    @action(methods=['PUT'], detail=True, serializer_class=CandidateSerializer)
+    @action(methods=['POST'], detail=True, serializer_class=CandidateSerializer)
     def apply(self, request, pk):
         serialized = CandidateApplySerializer(data=request.data)
         serialized.is_valid(raise_exception=True)
         cand = serialized.save()
         self.get_object().candidates.add(cand)
-
         return Response(serialized.data, status=status.HTTP_201_CREATED)
 
 
