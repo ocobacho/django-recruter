@@ -14,7 +14,7 @@ class Candidate(Person):
 
     first_name = models.CharField(_('First name'), max_length=150)
     last_name = models.CharField(_('Last name'), max_length=150)
-    personal_id = models.CharField(_('ID'), max_length=11, unique=True)
+    personal_id = models.CharField(_('Personal ID'), max_length=11, unique=True)
     current_address = models.CharField(_('Current Address'), max_length=200)
     edad = models.PositiveSmallIntegerField(_('Age'))
     sex = models.CharField(_('Sex'), choices=SEX, max_length=3)
@@ -27,7 +27,8 @@ class Candidate(Person):
 
 class Campaign(models.Model):
     name = models.CharField(_('Name'), max_length=150)
-    candidates = models.ManyToManyField(Candidate, verbose_name=_('Candidates'), )
+    description = models.TextField(null=True, blank=True)
+    candidates = models.ManyToManyField(Candidate, verbose_name=_('Candidates'), blank=True )
     active = models.BooleanField(_('Active'), default=True)
 
     def __str__(self):
