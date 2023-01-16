@@ -68,7 +68,7 @@ class FinanzasRestTest(APITestCase):
             'last_name': 'Cobacho',
             'personal_id': '123123',
             'current_address': 'fiiid',
-            'edad': 5,
+            'edad': 25,
             'sex': 'm',
             'technologies': [
                 {'technology': tech1.id, 'years_xp': 12,},
@@ -95,7 +95,7 @@ class FinanzasRestTest(APITestCase):
             'last_name': 'Cobacho',
             'personal_id': '123123',
             'current_address': 'fiiid',
-            'edad': 5,
+            'edad': 25,
             'sex': 'm',
             'technologies': [
                 {'technology': tech1.id, 'years_xp': 12,},
@@ -104,5 +104,26 @@ class FinanzasRestTest(APITestCase):
         }
 
         response = self.client.post(url + f"/{self.Campaign1.id}/apply", data, format='json')
+        print(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.data['technologies'][0], 'Technology Experience with this Technology and Candidate already exists.')
+
+    def test_candidate_apply_expierience_empty(self):
+        url = "/api/v1/campaigns/r_campaings"
+        tech1 = Technology.objects.create(name="react")
+
+        data = {
+            'first_name': 'Jesus',
+            'last_name': 'Cobacho',
+            'personal_id': '123123',
+            'current_address': 'fiiid',
+            'edad': 25,
+            'sex': 'm',
+            'technologies': [
+            ]
+        }
+
+        response = self.client.post(url + f"/{self.Campaign1.id}/apply", data, format='json')
+        print(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data['technologies'][0], 'You must have at least one technology experience')

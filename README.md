@@ -7,26 +7,47 @@ pass: ok
 
 
 ## Install django
-
+Clonar repo
+```shell script
 $ git clone https://github.com/ocobacho/django-recruter.git
-
+```
+Move proyect folder
+```shell script
 $ cd django-recruter
-
+```
+Crear entorno virtual
+```shell script
 $ virtualenv venv
-
+```
+``` shell script
 $ source venv/bin/activate
+```
 
+``` shell script
 $ python manage.py migrate --setting=conf.settings.base
+```
+``` shell script
+$ python manage.py runserver --setting=conf.settings.base
 
-$ python manage.py runser --setting=conf.settings.base
+```
+```shell script
+$ python manage.py test --setting=conf.settings.base
+
+```
 
 ## Install react
 
+``` shell script
 $ cd frontendjs
+```
 
+``` shell script
 $ yarn 
+```
 
+``` shell script
 $ yarn start
+```
 
 
 ## Ejercicio para diagnóstico

@@ -60,7 +60,7 @@ export default function CandidateExperience(props) {
 
         console.log(error)
 
-        if (found == undefined || error == false) {
+        if (found == undefined && error == false) {
             setTechnologies([...technologies, data])
         }
     };

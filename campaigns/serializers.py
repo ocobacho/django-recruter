@@ -31,7 +31,7 @@ class TechnologySerializer(serializers.ModelSerializer):
 
 
 class CandidateApplySerializer(serializers.ModelSerializer):
-    technologies = serializers.ListSerializer(child=TechnologyExperienceSerializer(), write_only=True)
+    technologies = serializers.ListSerializer(child=TechnologyExperienceSerializer(), write_only=True, required=True)
 
     class Meta:
         model = Candidate
@@ -46,14 +46,20 @@ class CandidateApplySerializer(serializers.ModelSerializer):
             'technologies'
         )
 
+    def validate_technologies(self, value):
+        if len(value) == 0:
+            raise serializers.ValidationError("You must have at least one technology experience")
+        return value
+
     def create(self, validated_data):
         technologies = validated_data.pop('technologies')
         candidate = Candidate.objects.create(**validated_data)
         print(validated_data, technologies)
         for tech in technologies:
-            try:
+            print(tech)
+            if not TechnologyExperience.objects.filter(technology=tech["technology"], candidate=candidate).exists():
                 TechnologyExperience.objects.create(**tech, candidate=candidate)
-            except IntegrityError:
+            else:
                 candidate.delete()
                 raise serializers.ValidationError(
                     {'technologies': ['Technology Experience with this Technology and Candidate already exists.']})
