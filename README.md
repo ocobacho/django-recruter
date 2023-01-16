@@ -1,6 +1,10 @@
 # Demo Django Recruter
 
-admin http://comercial.alwaysdata.net/admin/
+[Click to go to the admin Site](http://comercial.alwaysdata.net/admin/) - http://comercial.alwaysdata.net/admin/
+
+user: admin
+pass: ok
+
 
 ## Install django
 
