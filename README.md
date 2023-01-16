@@ -7,7 +7,7 @@ pass: ok
 
 
 ## Install django
-Clonar repo
+Clone repo
 ```shell script
 $ git clone https://github.com/ocobacho/django-recruter.git
 ```
