@@ -22,31 +22,21 @@ export default function DefaultTable({columns, url, title, setSelected, refresh}
     const [rowCount, setRowCount] = useState([]);
     const [loading, setLoading] = useState(true);
     const [waiting, setWaiting] = useState(true);
-    // const [limit, setLimit] = useState(25);
-    // const [ordering, setOrdering] = useState("");
     const [params, setParams] = useState({limit: 25, ordering: "", offset: 0});
 
-    // const [loading, setLoading] = useState(false);
     const onPageChange = (page, e) => {
         setLoading(true);
         setParams({...params, offset: page * params.limit})
     };
 
     const onPageSizeChange = async (pageSize) => {
-        // setLimit(pageSize);
         setParams({...params, limit: pageSize})
     };
 
     const getRows = async (page = 0) => {
         setLoading(true);
-        // let data = {
-        //     limit: limit,
-        //     offset: page * limit,
-        //     ordering: ordering
-        // };
         try {
             const response = await client.get(url, {params: params});
-            console.log("response", response)
             if (response.status === 200) {
                 if(response.data.hasOwnProperty("results")===true){
                     setRowCount(response.data.count);

@@ -9,33 +9,34 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import Tooltip from "@material-ui/core/Tooltip";
 import MenuItem from "@material-ui/core/MenuItem";
-
-const columns = [
-    {
-        field: 'years_xp',
-        headerName: 'Years',
-        flex: 1,
-    },
-    {
-        field: 'technology',
-        headerName: 'Technology',
-        flex: 1,
-    },
-];
+import client from "../../../api/client";
 
 let nextId = 0;
+const url = '/api/v1/campaigns/r_technologies';
 export default function CandidateExperience(props) {
     const {parentData, setParentData, ...others} = props;
     const [technologies, setTechnologies] = useState([]);
     const [data, setData] = useState({"years_xp": 16}, {"technology": ""});
     const [serverTech, setServerTech] = useState([]);
+    const params = {};
+
+    const getTechnologies = async () => {
+        try {
+            const response = await client.get(url, {params: params});
+            if (response.status === 200) {
+                if (response.data.hasOwnProperty("results") === true) {
+                    setServerTech(response.data.results);
+                } else {
+                    setServerTech([]);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     const fieldChange = (e) => {
         setData({...data, [e.target.name]: e.target.value});
-    };
-
-    const handleCellEditCommit = (props) => {
-        console.log("cell editing")
     };
 
     const onExperienceAdd = (e) => {
@@ -46,20 +47,26 @@ export default function CandidateExperience(props) {
         if (found == undefined) {
             setTechnologies([...technologies, data])
         }
-
     };
 
     useEffect(() => {
         setParentData({...parentData, ['technologies']: technologies})
     }, [technologies]);
 
+    useEffect(() => {
+        getTechnologies()
+    }, []);
+
     return <div>
         <LabelledOutline label={"Technology Experience"}>
             {technologies.map((item, key) => (
                 <Grid container key={key}>
                     <Grid item sm={4} justifyContent={"center"}>
-                        <Controls.TextField name={"technology"} label={"Technology"} required value={item.technology}
-                                            onChange={(e) => {
+                        <Controls.TextField
+                            select
+                            label="Technology"
+                            value={item.technology}
+                            onChange={(e) => {
                                                 setTechnologies(
                                                     [...technologies.filter(a =>
                                                         a.id !== item.id
@@ -69,7 +76,18 @@ export default function CandidateExperience(props) {
                                                         "years_xp": item.years_xp
                                                     }]
                                                 );
-                                            }}/>
+                                            }}
+                            name={'technology'}
+                            // error={errors.hasOwnProperty('sex')}
+                            // helperText={getErrors('sex')}
+                        >
+
+                            {serverTech.map((option) => (
+                                <MenuItem key={option.id} value={option.id}>
+                                    {option.name}
+                                </MenuItem>
+                            ))}
+                        </Controls.TextField>
                     </Grid>
                     <Grid item sm={4} justifyContent={"center"}>
 
@@ -105,7 +123,7 @@ export default function CandidateExperience(props) {
                         label="Technology"
                         value={data.technology}
                         onChange={fieldChange}
-                        variant="outlined"
+                        // variant="outlined"
                         name={'technology'}
                         // error={errors.hasOwnProperty('sex')}
                         // helperText={getErrors('sex')}
@@ -117,13 +135,11 @@ export default function CandidateExperience(props) {
                             </MenuItem>
                         ))}
                     </Controls.TextField>
-                    <Controls.TextField name={"technology"} label={"Technology"} required value={data.technology}
-                                        onChange={fieldChange}/>
 
                 </Grid>
                 <Grid item sm={4} justifyContent={"center"}>
                     <Controls.TextField name={"years_xp"} label={"Years of Experience"} type={'number'} required
-                                        value={data.years_xp} inputProps={{ min: 16, max: 65 }}
+                                        value={data.years_xp} inputProps={{min: 16, max: 65}}
                                         onChange={fieldChange}/>
                 </Grid>
                 <Grid item sm={4} justifyContent={"center"}>

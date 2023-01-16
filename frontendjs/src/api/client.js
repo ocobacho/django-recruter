@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 let conf = {
-    baseURL: "http://127.0.0.1:8000/",
+    baseURL: process.env.REACT_APP_SERVER_URL,
 };
 
 const client = axios.create(conf);
