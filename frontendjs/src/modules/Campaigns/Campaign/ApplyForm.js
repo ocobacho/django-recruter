@@ -47,7 +47,7 @@ const initialData = {
     'last_name': '',
     'personal_id': '',
     'current_address': '',
-    'edad': '',
+    'edad': 16,
     'sex': 'f',
     'technologies': [
         // {'technology': tech1.id, 'years_xp': 12,},
@@ -200,6 +200,7 @@ export default function ApplyForm({goBack, selected, url, setSelected}) {
                                                         value={data.edad}
                                                         onChange={fieldChange}
                                                         error={errors.hasOwnProperty('edad')}
+                                                        inputProps={{min: 16, max: 65}}
                                                         helperText={getErrors('edad')}/>
                                 </Grid>
                                 <Grid item sm={6} justifyContent={"center"}>

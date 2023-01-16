@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
@@ -5,6 +6,11 @@ from django.db import models
 # Nombre y Apellidos, CI, dirección actual, edad y sexo
 from hr.models import Person
 
+def validate_edad(value):
+    if value < 16 or value > 65:
+        raise ValidationError(
+             _('The age must be between 16 and 65')
+        )
 
 class Candidate(Person):
     SEX = (
@@ -12,11 +18,12 @@ class Candidate(Person):
         ('f', 'F')
     )
 
+
     first_name = models.CharField(_('First name'), max_length=150)
     last_name = models.CharField(_('Last name'), max_length=150)
     personal_id = models.CharField(_('Personal ID'), max_length=11, unique=True)
     current_address = models.CharField(_('Current Address'), max_length=200)
-    edad = models.PositiveSmallIntegerField(_('Age'))
+    edad = models.PositiveSmallIntegerField(_('Age'), validators=[validate_edad])
     sex = models.CharField(_('Sex'), choices=SEX, max_length=3)
     accepted = models.BooleanField(default=False)
     technologies = models.ManyToManyField('campaigns.Technology', through='TechnologyExperience')

@@ -16,7 +16,7 @@ const url = '/api/v1/campaigns/r_technologies';
 export default function CandidateExperience(props) {
     const {parentData, setParentData, ...others} = props;
     const [technologies, setTechnologies] = useState([]);
-    const [data, setData] = useState({"years_xp": 16}, {"technology": ""});
+    const [data, setData] = useState({"years_xp": ""}, {"technology": ""});
     const [serverTech, setServerTech] = useState([]);
     const params = {};
 
@@ -36,15 +36,31 @@ export default function CandidateExperience(props) {
     };
 
     const fieldChange = (e) => {
+
         setData({...data, [e.target.name]: e.target.value});
     };
 
     const onExperienceAdd = (e) => {
         setData({...data, ['id']: nextId++});
+        let error = false
+        console.log(data)
+        if (data.years_xp == "" || data.years_xp == 0){
+            error = true
+        }
+
+        if (data.technology == ""){
+            error = true
+        }
+
+
+
         let found = technologies.find((item) => {
             return item.technology == data.technology;
         });
-        if (found == undefined) {
+
+        console.log(error)
+
+        if (found == undefined || error == false) {
             setTechnologies([...technologies, data])
         }
     };
@@ -139,7 +155,7 @@ export default function CandidateExperience(props) {
                 </Grid>
                 <Grid item sm={4} justifyContent={"center"}>
                     <Controls.TextField name={"years_xp"} label={"Years of Experience"} type={'number'} required
-                                        value={data.years_xp} inputProps={{min: 16, max: 65}}
+                                        value={data.years_xp}
                                         onChange={fieldChange}/>
                 </Grid>
                 <Grid item sm={4} justifyContent={"center"}>
