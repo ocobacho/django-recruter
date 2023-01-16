@@ -1,3 +1,7 @@
+# Demo Django Recruter
+
+go django admin http://comercial.alwaysdata.net/admin/
+
 # Install django
 
 $ git clone https://github.com/ocobacho/django-recruter.git
