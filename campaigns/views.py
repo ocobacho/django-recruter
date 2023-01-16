@@ -4,13 +4,13 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from url_filter.integrations.drf import DjangoFilterBackend
 
-from .models import Campaign, Candidate, TechnologyExperience
+from .models import Campaign, Candidate, TechnologyExperience, Technology
 # Create your views here.
 from .serializers import CampaignSerializer, CandidateApplySerializer, CandidateSerializer, \
-    TechnologyExperienceSerializer
+    TechnologyExperienceSerializer, TechnologySerializer
 
 
-class CampaignViewset(viewsets.ReadOnlyModelViewSet):
+class CampaignRViewset(viewsets.ReadOnlyModelViewSet):
     queryset = Campaign.objects.all()
     serializer_class = CampaignSerializer
     filter_backends = (filters.OrderingFilter, DjangoFilterBackend)
@@ -35,3 +35,12 @@ class CandidateViewset(viewsets.ModelViewSet):
 class TechnologyExperienceViewset(viewsets.ModelViewSet):
     queryset = TechnologyExperience.objects.all()
     serializer_class = TechnologyExperienceSerializer
+
+
+class TechnologyRViewset(viewsets.ReadOnlyModelViewSet):
+    queryset = Technology.objects.all()
+    serializer_class = TechnologySerializer
+
+    filter_backends = (filters.OrderingFilter, DjangoFilterBackend)
+    filter_fields = ('name', )
+    search_fields = ('name',)

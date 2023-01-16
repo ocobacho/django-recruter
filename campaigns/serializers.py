@@ -1,7 +1,7 @@
 from django.db import IntegrityError
 from django.db.models import UniqueConstraint
 
-from .models import Campaign, Candidate, TechnologyExperience
+from .models import Campaign, Candidate, TechnologyExperience, Technology
 from rest_framework import serializers
 
 
@@ -21,7 +21,13 @@ class CampaignSerializer(serializers.ModelSerializer):
 class TechnologyExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = TechnologyExperience
-        fields = ('id', 'technology', 'years_xp', )
+        fields = ('id', 'technology', 'years_xp',)
+
+
+class TechnologySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Technology
+        fields = ('id', 'name',)
 
 
 class CandidateApplySerializer(serializers.ModelSerializer):
@@ -48,7 +54,9 @@ class CandidateApplySerializer(serializers.ModelSerializer):
             try:
                 TechnologyExperience.objects.create(**tech, candidate=candidate)
             except IntegrityError:
-                raise serializers.ValidationError({'technologies': ['Technology Experience with this Technology and Candidate already exists.']})
+                candidate.delete()
+                raise serializers.ValidationError(
+                    {'technologies': ['Technology Experience with this Technology and Candidate already exists.']})
         return candidate
 
 

@@ -18,8 +18,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DefaultCard({campaing, setSelected}) {
+export default function DefaultCard({campaing, setCurrent, setSelected}) {
   const classes = useStyles();
+
+  function onApply() {
+    setCurrent('CampaignDetail');
+    setSelected([campaing.id]);
+  }
 
   return (
     <Card className={classes.root}>
@@ -39,10 +44,10 @@ export default function DefaultCard({campaing, setSelected}) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" >
+        <Button size="small" color="primary" onClick={onApply}>
           Apply
         </Button>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" >
           Learn More
         </Button>
       </CardActions>
